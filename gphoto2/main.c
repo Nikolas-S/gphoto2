@@ -1134,7 +1134,7 @@ capture_generic (CameraCaptureType type, const char __unused__ *name, int downlo
 	/* tricky, this loop might need to download both JPG and RAW. so wait longer. */
 	/*if (glob_frames || end_next || !glob_interval || glob_bulblength) waittime = 2000;*/
 	/* Drain the event queue at the end and download left over added images */
-	while (1) {
+	while (!(gp_params.flags & FLAGS_SINGLE_IMAGE_ONLY)) {
 		int realwait = waittime - (-timediff_now(&expose_end_time));
 		if (realwait < -3) break; /* wait at most 6 seconds */
 
@@ -1361,7 +1361,8 @@ typedef enum {
 	ARG_USAGE,
 	ARG_USBID,
 	ARG_VERSION,
-	ARG_WAIT_EVENT
+	ARG_WAIT_EVENT,
+	ARG_SINGLE_IMAGE_ONLY
 } Arg;
 
 typedef enum {
@@ -1494,6 +1495,10 @@ cb_arg_init (poptContext __unused__ ctx,
 
 	case ARG_REVERSE:
 		gp_params.flags |= FLAGS_REVERSE;
+		break;
+
+	case ARG_SINGLE_IMAGE_ONLY:
+		gp_params.flags |= FLAGS_SINGLE_IMAGE_ONLY;
 		break;
 
 	case ARG_MODEL:
@@ -2098,6 +2103,8 @@ main (int argc, char **argv, char **envp)
 		 ARG_CAPTURE_SOUND, N_("Capture an audio clip"), NULL},
 		{"capture-tethered", '\0', POPT_ARG_STRING|POPT_ARGFLAG_OPTIONAL, NULL,
 		 ARG_CAPTURE_TETHERED, N_("Wait for shutter release on the camera and download"), N_("EVENT")},
+		{"single-img-only", '\0', POPT_ARG_NONE, NULL, ARG_SINGLE_IMAGE_ONLY,
+		 N_("Tell gphoto2 that for sure only 1 image will be captured"), NULL},
 		POPT_TABLEEND
 	};
 	const struct poptOption fileOptions[] = {
