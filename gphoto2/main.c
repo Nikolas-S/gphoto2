@@ -1259,7 +1259,7 @@ static void
 signal_exit (int __unused__ signo)
 {
 	/* If we already were told to cancel, abort. */
-	if (glob_cancel) {
+	if (glob_cancel || (gp_params.flags & FLAGS_RESPONSIVE_ABORT)) {
 		if ((gp_params.flags & FLAGS_QUIET) == 0)
 			printf (_("\nAborting...\n"));
 		if (gp_params.camera)
@@ -1361,7 +1361,8 @@ typedef enum {
 	ARG_USAGE,
 	ARG_USBID,
 	ARG_VERSION,
-	ARG_WAIT_EVENT
+	ARG_WAIT_EVENT,
+	ARG_RESPONSIVE_ABORT
 } Arg;
 
 typedef enum {
@@ -1494,6 +1495,10 @@ cb_arg_init (poptContext __unused__ ctx,
 
 	case ARG_REVERSE:
 		gp_params.flags |= FLAGS_REVERSE;
+		break;
+
+	case ARG_RESPONSIVE_ABORT:
+		gp_params.flags |= FLAGS_RESPONSIVE_ABORT;
 		break;
 
 	case ARG_MODEL:
@@ -2098,6 +2103,8 @@ main (int argc, char **argv, char **envp)
 		 ARG_CAPTURE_SOUND, N_("Capture an audio clip"), NULL},
 		{"capture-tethered", '\0', POPT_ARG_STRING|POPT_ARGFLAG_OPTIONAL, NULL,
 		 ARG_CAPTURE_TETHERED, N_("Wait for shutter release on the camera and download"), N_("EVENT")},
+		 {"responsive-abort", '\0', POPT_ARG_NONE, NULL, ARG_RESPONSIVE_ABORT,
+		 N_("Quit immediately when SIGINT or SIGTERM is reveiced"), NULL},
 		POPT_TABLEEND
 	};
 	const struct poptOption fileOptions[] = {
