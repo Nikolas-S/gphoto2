@@ -39,6 +39,7 @@ typedef enum {
 	FLAGS_SKIP_EXISTING	= 1 << 10,
 	FLAGS_PARSABLE		= 1 << 11,
 	FLAGS_SINGLE_IMAGE_ONLY = 1 << 12,
+	FLAGS_RESPONSIVE_ABORT = 1 << 13
 } Flags;
 
 typedef enum {
