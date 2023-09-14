@@ -2104,7 +2104,7 @@ main (int argc, char **argv, char **envp)
 		{"capture-tethered", '\0', POPT_ARG_STRING|POPT_ARGFLAG_OPTIONAL, NULL,
 		 ARG_CAPTURE_TETHERED, N_("Wait for shutter release on the camera and download"), N_("EVENT")},
 		 {"responsive-abort", '\0', POPT_ARG_NONE, NULL, ARG_RESPONSIVE_ABORT,
-		 N_("Quit immediately when SIGINT or SIGTERM is reveiced"), NULL},
+		 N_("Quit immediately when SIGINT or SIGTERM is reveived"), NULL},
 		POPT_TABLEEND
 	};
 	const struct poptOption fileOptions[] = {
